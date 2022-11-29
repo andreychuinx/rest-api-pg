@@ -1,10 +1,13 @@
 const db = require('../../config/index')
 
-const listUsers = async (req, res) => {
+const listMahasiswa = async (req, res) => {
   try {
     const query = await db.query(
       `
-        select * from users;
+        select mh.nik, mh.nama, mh.tanggal_lahir, mh.alamat, jr.nama_jurusan
+        from mahasiswa mh
+        inner join jurusan jr
+        on mh.id_jurusan = jr.id_jurusan;
       `
     )
     res.status(200).send({
@@ -12,6 +15,7 @@ const listUsers = async (req, res) => {
       data: query.rows
     })
   } catch(err) {
+    console.log(err)
     res.status(400).send({
       message: 'ERROR',
       data: err
@@ -19,4 +23,4 @@ const listUsers = async (req, res) => {
   }
 }
 
-module.exports = listUsers;
+module.exports = listMahasiswa;
